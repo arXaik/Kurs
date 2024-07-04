@@ -1,0 +1,112 @@
+﻿<Window x:Class="Kursavik.Views.ProductView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursavik.Views" xmlns:viewmodels="clr-namespace:Kursavik.ViewModels" 
+        xmlns:localMy="clr-namespace:Kurs.Model"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=localMy:Product}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+         Title="Действущие лица" Height="700" Width="800">
+    <Window.Resources>
+        <localMy:FromBytesToImageConverter x:Key="myConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Menu Grid.Row="0" Grid.RowSpan="2">
+                    <MenuItem Header="Данные" Height="42" Width="145">
+                        <MenuItem Header="Операции" Click="Show_Operations"/>
+                        <MenuItem Header="Отношение лиц к происшествии" Click="Show_Items" />
+                        <MenuItem Header="Регистрация прошествий"  Click="Show_TypeInstrument" />
+                        <MenuItem Header="Инциденты" Click="Show_Instruments" />
+                    </MenuItem>
+                </Menu>
+                <ListBox x:Name="Product" Grid.Row="1" Margin="10 0 10 10"
+                    ItemsSource="{Binding ProductsList}"
+                      SelectedItem="{Binding SelectedProduct}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5">
+
+                                <TextBlock Text="{Binding Path=Name}" FontSize="15" />
+                                <TextBlock Text="{Binding Path=Price}" FontSize="15" />
+                                <TextBlock Text="{Binding Path=Count}" FontSize="15" />
+                                <TextBlock Text="{Binding Path=LastBatch}" FontSize="15"/>
+                                <TextBlock Text="{Binding Path=Foto}" FontSize="15"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <materialDesign:Card Margin="5">
+                        <Button Content="+" Width="100" Margin="10" Command="{Binding AddCommand}"/>
+                    </materialDesign:Card>
+                    <materialDesign:Card Margin="5">
+                        <Button Content="-" Width="100" Margin="10"/>
+                    </materialDesign:Card>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Cursor="">
+                        <StackPanel Grid.Column="0" DataContext="{Binding SelectedProduct}">
+                            <materialDesign:Card Margin="5">
+                                <Image x:Name="ImageProduct" Margin="10" Height="200"
+									   Source="{Binding Foto,Converter={StaticResource myConverter}}"/>
+                            </materialDesign:Card>
+                        </StackPanel>
+                        <materialDesign:Card Margin="5">
+                            <Button Content="Загрузить" FontSize="20" Command="{Binding LoadCommand}"/>
+                        </materialDesign:Card>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Center" DataContext="{Binding SelectedProduct}" Grid.ColumnSpan="3" Height="475" Margin="148,0,0,0">
+                        <Label Content="ФИО" Grid.Row="1"/>
+                        <TextBox x:Name="Name" Margin="10,25,10,10" Grid.Row="1"
+							Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Количество судимостей" Grid.Row="2"/>
+                        <TextBox x:Name="Price" Margin="10,25,10,10" Grid.Row="2"
+							Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Height="24"/>
+                        <Label Content="Описание происшествия" Grid.Row="3"/>
+                        <TextBox x:Name="Count" Margin="10,25,10,10" Grid.Row="3"
+							Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" Height="25"/>
+                        <Label Content="Дата инцидента" Grid.Row="4"/>
+                        <DatePicker x:Name="LastBatch" Margin="10,25,10,10" Grid.Row="4"
+						Text="{Binding Last_batch, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Адрес" Height="32"/>
+                        <TextBox x:Name="adress" Margin="10,25,10,10" Grid.Row="5" Height="27"/>
+
+                    </StackPanel>
+                </Grid>
+                <materialDesign:Card Margin="5" Grid.Row="1">
+                    <Button Content="OK" Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedProduct}" Width="100"/>
+                </materialDesign:Card>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
